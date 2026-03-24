@@ -55,7 +55,7 @@ pipeline {
         }
         stage('HTML Reporting'){
             steps {
-                def reportDir = "${WORKSPACE}/reports"
+                reportDir = "${WORKSPACE}/reports"
                 publishHTML(target: [
                   reportName: 'My Report',
                   reportDir: reportDir,
