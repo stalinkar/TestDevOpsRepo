@@ -53,17 +53,17 @@ pipeline {
                 sh "docker push 640168426521.dkr.ecr.us-east-1.amazonaws.com/pythonapp:v1"
             }
         }
-        stage('HTML Reporting'){
-            steps {
-                sh 'mkdir -p /home/ec2-user/project/workspace/git-pp01/reports'
-                publishHTML (target : [allowMissing: false,
-                 alwaysLinkToLastBuild: true,
-                 keepAll: true,
-                 reportDir: 'reports',
-                 reportFiles: 'myreport.html',
-                 reportName: 'My Reports',
-                 reportTitles: 'The Report'])
-            }
-        }
+        // stage('HTML Reporting'){
+        //     steps {
+        //         sh 'mkdir -p /home/ec2-user/project/workspace/git-pp01/reports'
+        //         publishHTML (target : [allowMissing: false,
+        //          alwaysLinkToLastBuild: true,
+        //          keepAll: true,
+        //          reportDir: 'reports',
+        //          reportFiles: 'myreport.html',
+        //          reportName: 'My Reports',
+        //          reportTitles: 'The Report'])
+        //     }
+        // }
     }
 }
