@@ -55,19 +55,14 @@ pipeline {
         }
         stage('HTML Reporting'){
             steps {
-                reportDir = "${WORKSPACE}/reports"
-                publishHTML(target: [
-                  reportName: 'My Report',
-                  reportDir: reportDir,
-                  reportFiles: 'index.html'
-                ])
-                // publishHTML (target : [allowMissing: false,
-                //  alwaysLinkToLastBuild: true,
-                //  keepAll: true,
-                //  reportDir: 'reports',
-                //  reportFiles: 'myreport.html',
-                //  reportName: 'My Reports',
-                //  reportTitles: 'The Report'])
+                sh 'mkdir -p /home/ec2-user/project/workspace/git-pp01/reports'
+                publishHTML (target : [allowMissing: false,
+                 alwaysLinkToLastBuild: true,
+                 keepAll: true,
+                 reportDir: 'reports',
+                 reportFiles: 'myreport.html',
+                 reportName: 'My Reports',
+                 reportTitles: 'The Report'])
             }
         }
     }
