@@ -33,17 +33,6 @@ pipeline {
                 sh "docker compose up -d"
             }
         }
-        // stage('HTML Reporting'){
-        //     steps {
-        //         publishHTML (target : [allowMissing: false,
-        //          alwaysLinkToLastBuild: true,
-        //          keepAll: true,
-        //          reportDir: 'reports',
-        //          reportFiles: 'myreport.html',
-        //          reportName: 'My Reports',
-        //          reportTitles: 'The Report'])
-        //     }
-        // }
 
         stage('Cheking output') {
             steps {
@@ -62,6 +51,23 @@ pipeline {
                sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 640168426521.dkr.ecr.us-east-1.amazonaws.com"
                sh "docker tag pythonapp:v1 640168426521.dkr.ecr.us-east-1.amazonaws.com/pythonapp:v1"
                 sh "docker push 640168426521.dkr.ecr.us-east-1.amazonaws.com/pythonapp:v1"
+            }
+        }
+        stage('HTML Reporting'){
+            steps {
+                def reportDir = "${WORKSPACE}/reports"
+                publishHTML(target: [
+                  reportName: 'My Report',
+                  reportDir: reportDir,
+                  reportFiles: 'index.html'
+                ])
+                // publishHTML (target : [allowMissing: false,
+                //  alwaysLinkToLastBuild: true,
+                //  keepAll: true,
+                //  reportDir: 'reports',
+                //  reportFiles: 'myreport.html',
+                //  reportName: 'My Reports',
+                //  reportTitles: 'The Report'])
             }
         }
     }
