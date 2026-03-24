@@ -12,9 +12,10 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Check the docker cli') {
             steps {
-                echo "Build step here..."
+                sh "docker --version"
+                sh "docker ps -a"
             }
         }
 
