@@ -91,10 +91,10 @@ pipeline {
         //         }
         //     }
         // }
-        post {
+    }
+    post {
             success {
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: '/usr/share/nginx/html', reportFiles: 'index.html', reportName: 'My Run Report', reportTitles: 'Nginx', useWrapperFileDirectly: true])
             }
         }
-    }
 }
