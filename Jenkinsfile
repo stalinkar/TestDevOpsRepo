@@ -57,7 +57,7 @@ pipeline {
             steps {
                 script {
                     // Define the report directory path
-                    def reportDir = '/home/ec2-user/project/workspace/git-pp01/reports'
+                    reportDir = '/home/ec2-user/project/workspace/git-pp01/reports'
                     
                     // Ensure the reports directory exists
                     sh "mkdir -p ${reportDir}"  
