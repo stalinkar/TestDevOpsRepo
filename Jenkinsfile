@@ -46,13 +46,13 @@ pipeline {
                sh "curl localhost:9010"
             }
         }
-        stage('Image push') {
-            steps {
-               sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 640168426521.dkr.ecr.us-east-1.amazonaws.com"
-               sh "docker tag pythonapp:v1 640168426521.dkr.ecr.us-east-1.amazonaws.com/pythonapp:v1"
-                sh "docker push 640168426521.dkr.ecr.us-east-1.amazonaws.com/pythonapp:v1"
-            }
-        }
+        // stage('Image push') {
+        //     steps {
+        //        sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 640168426521.dkr.ecr.us-east-1.amazonaws.com"
+        //        sh "docker tag pythonapp:v1 640168426521.dkr.ecr.us-east-1.amazonaws.com/pythonapp:v1"
+        //         sh "docker push 640168426521.dkr.ecr.us-east-1.amazonaws.com/pythonapp:v1"
+        //     }
+        // }
         stage('HTML Reporting'){
             steps {
                 sh 'mkdir -p /home/ec2-user/project/workspace/git-pp01/reports'
