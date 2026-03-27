@@ -37,7 +37,7 @@ pipeline {
         stage('DockerContainer Creation') {
 		    steps {
 		        echo "Running Docker Compose here..."
-		        sh "envsubst < docker-compose.yml | docker-compose -f - up -d"
+		        sh "envsubst < docker-compose.yaml | docker-compose -f - up -d"
 		    }
 		}
 
