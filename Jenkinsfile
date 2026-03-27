@@ -89,7 +89,7 @@ pipeline {
 
         stage('Status check') {
 		    steps {
-                sh "kubectl rollout status deployment/py-deploy"
+                sh "kubectl rollout status deployment/py-deploy-cm"
                 sh "kubectl get pods"
                 sh "kubectl get svc"
                 sh "kubectl get deployments"
