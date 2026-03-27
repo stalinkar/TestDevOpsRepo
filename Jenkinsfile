@@ -17,7 +17,7 @@ pipeline {
             steps {
                 sh "sudo docker --version"
                 sh "sudo docker ps -a"
-                sh "sudo docker-compose --version"
+                sh "docker-compose --version"
             }
         }
         stage('Docker build') {
@@ -30,14 +30,14 @@ pipeline {
         stage('Docker Container Cerateion') {
             steps {
                 echo "Running docker-compose here..."
-                sh "sudo docker-compose up -d"
+                sh "docker-compose up -d"
             }
         }
 
         stage('Cheking output') {
             steps {
                sh "sudo docker ps"
-                sh "sudo docker-compose ps"
+                sh "docker-compose ps"
             }
         }
         stage('Hosting Nginx FrontEnd') {
