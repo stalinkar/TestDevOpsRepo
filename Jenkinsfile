@@ -30,7 +30,7 @@ pipeline {
         stage('Docker Container Cerateion') {
             steps {
                 echo "Running docker compose here..."
-                sh "docker compose up -d"
+                sh "sudo docker compose up -d"
             }
         }
 
