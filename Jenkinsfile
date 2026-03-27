@@ -3,63 +3,66 @@ pipeline {
     triggers {
         pollSCM('H/2 * * * *')   // every 2 minutes
     }
-
+	environment {
+        REGISTRY = '640168426521.dkr.ecr.us-east-1.amazonaws.com'  // e.g., '123456789.dkr.ecr.us-east-1.amazonaws.com' for ECR
+        IMAGE_NAME = 'pythonapp'
+        TAG = "${BUILD_NUMBER}"
+        FULL_IMAGE_NAME = "${REGISTRY}/${IMAGE_NAME}:${TAG}"
+    }
+    
     stages {
         stage('Clone Repository') {
             steps {
-                    git branch: 'main',
-                    url: 'git@github.com:stalinkar/TestDevOpsRepo.git',
+               git branch: 'main',
+                    url: 'REPO_URL',
                     credentialsId: 'github-creds'
             }
         }
 
         stage('Check the docker cli') {
             steps {
-                sh "sudo docker --version"
-                sh "sudo docker ps -a"
-                sh "docker-compose --version"
-            }
-        }
-        stage('Docker build') {
-            steps {
-                echo "Docker build running"
-                sh "sudo docker build . -t pythonapp:v1"
+            sh "docker --version"
+            sh "docker ps -a"
+            sh "docker-compose --version"
             }
         }
 
-        stage('Docker Container Cerateion') {
-            steps {
-                echo "Running docker-compose here..."
-                sh "docker-compose up -d"
-            }
-        }
+        stage('Docker-Build') {
+		    steps {
+		        echo "Docker Build Step here..."
+		        sh "docker build . -t ${FULL_IMAGE_NAME}"
+		    }
+		}
+
+        stage('DockerContainer Creation') {
+		    steps {
+		        echo "Running Docker Compose here..."
+		        sh "envsubst < docker-compose.yml | docker-compose -f - up -d"
+		    }
+		}
 
         stage('Cheking output') {
             steps {
-               sh "sudo docker ps"
-                sh "docker-compose ps"
+                sh "docker ps"
+		        sh "docker-compose ps"
             }
         }
-        // stage('Hosting Nginx FrontEnd') {
-        //     steps {
-        //        sh "sudo yum install nginx -y"
-        //        sh "sudo systemctl start nginx" 
-        //     }
-        // }
 
         stage('app working') {
             steps {
                sh "curl localhost:9010"
             }
         }
-        stage('Image push') {
+
+        stage('Image Push') {
             steps {
-               sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 640168426521.dkr.ecr.us-east-1.amazonaws.com"
-               sh "docker tag pythonapp:v1 640168426521.dkr.ecr.us-east-1.amazonaws.com/pythonapp:v1"
-                sh "docker push 640168426521.dkr.ecr.us-east-1.amazonaws.com/pythonapp:v1"
+                sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${REGISTRY}"
+                sh "docker tag pythonapp:v1 ${FULL_IMAGE_NAME}"
+                sh "docker push ${FULL_IMAGE_NAME}"
             }
         }
-        stage('Check kube env') {
+
+		stage('Check kube env') {
             steps {
                 sh """
                 minikube status
@@ -67,23 +70,21 @@ pipeline {
                 """
             }
         }
-        stage('deploy kube files') {
-            steps {
-                sh """
-                kubectl apply -f py-redis-configmap
-                """
-            }
-        }
+		
+        stage('Deploy to Kubernetes') {
+		    steps {
+		        sh "sed -i 's|\${FULL_IMAGE_NAME}|${FULL_IMAGE_NAME}|g' py-redis-configmap/py-deploy.yaml"
+		        sh "kubectl apply -f py-redis-configmap/"
+		    }
+		}
+
         stage('App testing on kube env') {
             steps {
                sh "curl 192.168.49.2:30115"
             }
         }
 
+
     }
-    // post {
-    //         success {
-    //             publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: '/usr/share/nginx/html', reportFiles: 'index.html', reportName: 'My Run Report', reportTitles: 'Nginx', useWrapperFileDirectly: true])
-    //         }
-    //     }
+
 }

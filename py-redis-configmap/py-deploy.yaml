@@ -20,7 +20,7 @@ spec:
       containers:
         - name: python-container-cm
           # image: vishwacloudlab/pythonapp:v4-var
-          image: 640168426521.dkr.ecr.us-east-1.amazonaws.com/pythonapp:v1
+          image: ${FULL_IMAGE_NAME}
           ports:
             - containerPort: 8000
           envFrom:

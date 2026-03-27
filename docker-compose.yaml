@@ -2,7 +2,7 @@ version: '3'
 
 services:
   web:
-    image: pythonapp:v1
+    image: ${FULL_IMAGE_NAME}
     build: .
     ports:
       - "9010:8000"
