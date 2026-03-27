@@ -59,6 +59,22 @@ pipeline {
                 sh "docker push 640168426521.dkr.ecr.us-east-1.amazonaws.com/pythonapp:v1"
             }
         }
+        stage('Check kube env') {
+            steps {
+                sh """
+                minikube status
+                kubectl get nodes
+                """
+            }
+        }
+        stage('deploy kube files') {
+            steps {
+                sh """
+                kubectl apply -f py-redis-configmap
+                """
+            }
+        }
+
     }
     // post {
     //         success {
