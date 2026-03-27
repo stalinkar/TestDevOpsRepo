@@ -14,7 +14,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                git branch: 'main',
-                    url: 'REPO_URL',
+                    url: 'git@github.com:stalinkar/TestDevOpsRepo.git',
                     credentialsId: 'github-creds'
             }
         }
