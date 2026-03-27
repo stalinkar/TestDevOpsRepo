@@ -15,15 +15,15 @@ pipeline {
 
         stage('Check the docker cli') {
             steps {
-                sh "docker --version"
-                sh "docker ps -a"
-                sh "docker compose --version"
+                sh "sudo docker --version"
+                sh "sudo docker ps -a"
+                sh "sudo docker compose --version"
             }
         }
         stage('Docker build') {
             steps {
                 echo "Docker build running"
-                sh "docker build . -t pythonapp:v1"
+                sh "sudo docker build . -t pythonapp:v1"
             }
         }
 
@@ -36,8 +36,8 @@ pipeline {
 
         stage('Cheking output') {
             steps {
-               sh "docker ps"
-                sh "docker compose ps"
+               sh "sudo docker ps"
+                sh "sudo docker compose ps"
             }
         }
         stage('Hosting Nginx FrontEnd') {
