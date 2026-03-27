@@ -40,29 +40,29 @@ pipeline {
                 sh "docker-compose ps"
             }
         }
-        stage('Hosting Nginx FrontEnd') {
-            steps {
-               sh "sudo yum install nginx -y"
-               sh "sudo systemctl start nginx" 
-            }
-        }
+        // stage('Hosting Nginx FrontEnd') {
+        //     steps {
+        //        sh "sudo yum install nginx -y"
+        //        sh "sudo systemctl start nginx" 
+        //     }
+        // }
 
         stage('app working') {
             steps {
                sh "curl localhost:9010"
             }
         }
-        // stage('Image push') {
-        //     steps {
-        //        sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 640168426521.dkr.ecr.us-east-1.amazonaws.com"
-        //        sh "docker tag pythonapp:v1 640168426521.dkr.ecr.us-east-1.amazonaws.com/pythonapp:v1"
-        //         sh "docker push 640168426521.dkr.ecr.us-east-1.amazonaws.com/pythonapp:v1"
-        //     }
-        // }
-    }
-    post {
-            success {
-                publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: '/usr/share/nginx/html', reportFiles: 'index.html', reportName: 'My Run Report', reportTitles: 'Nginx', useWrapperFileDirectly: true])
+        stage('Image push') {
+            steps {
+               sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 640168426521.dkr.ecr.us-east-1.amazonaws.com"
+               sh "docker tag pythonapp:v1 640168426521.dkr.ecr.us-east-1.amazonaws.com/pythonapp:v1"
+                sh "docker push 640168426521.dkr.ecr.us-east-1.amazonaws.com/pythonapp:v1"
             }
         }
+    }
+    // post {
+    //         success {
+    //             publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: '/usr/share/nginx/html', reportFiles: 'index.html', reportName: 'My Run Report', reportTitles: 'Nginx', useWrapperFileDirectly: true])
+    //         }
+    //     }
 }
