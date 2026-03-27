@@ -27,6 +27,15 @@ pipeline {
             }
         }
 
+         stage('Clean up old images and containers') {
+            steps {
+                sh "docker-compose down"
+                sh "docker image prune -f"
+                sh "docker container prune -f"
+                sh "docker image rmi -f ${FULL_IMAGE_NAME} || true"
+            }
+        } 
+
         stage('Docker-Build') {
 		    steps {
 		        echo "Docker Build Step here..."
@@ -75,6 +84,16 @@ pipeline {
 		    steps {
 		        sh "sed -i 's|\${FULL_IMAGE_NAME}|${FULL_IMAGE_NAME}|g' py-redis-configmap/py-deploy.yaml"
 		        sh "kubectl apply -f py-redis-configmap/"
+		    }
+		}
+
+        stage('Status check') {
+		    steps {
+                sh "kubectl rollout status deployment/py-deploy"
+                sh "kubectl get pods"
+                sh "kubectl get svc"
+                sh "kubectl get deployments"
+
 		    }
 		}
 
