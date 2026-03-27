@@ -74,6 +74,11 @@ pipeline {
                 """
             }
         }
+        stage('App testing on kube env') {
+            steps {
+               sh "curl 192.168.49.2:30115"
+            }
+        }
 
     }
     // post {
